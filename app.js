@@ -4,7 +4,7 @@
 // =====================================================
 
 // 👉 YAHAN APNI API KEY PASTE KARO
-const GEMINI_API_KEY = "PASTE_YOUR_API_KEY_HERE";
+const GEMINI_API_KEY = AQ.Ab8RN6I9x2j8_NbiO8561hTik5zIeIi1SgjYov5IWLELE-i6Pg;
 
 // Stable Gemini model
 const GEMINI_MODEL = "gemini-2.5-flash";
