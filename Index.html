@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAI Hub - All in One AI Study Companion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1>🎓 EduAI Hub</h1>
+        <p>Your Smart All-in-One AI Learning Companion</p>
+    </header>
+
+    <main class="main-container">
+        <!-- AI Learning Tools Section -->
+        <section class="tools-section">
+            <h2>✨ AI Learning Tools</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('notes')">📝 Notes</button>
+                <button class="tab-btn" onclick="switchTab('quiz')">🧠 Quiz</button>
+                <button class="tab-btn" onclick="switchTab('ppt')">📊 PPT Maker</button>
+                <button class="tab-btn" onclick="switchTab('pyq')">🎯 PYQ Guess Paper</button>
+            </div>
+
+            <div class="input-card">
+                <input type="text" id="topicInput" placeholder="Enter topic name (e.g. HTML, DBMS, C Programming)...">
+                <button id="generateBtn" onclick="generateContent()">Generate ✨</button>
+            </div>
+
+            <div class="output-card">
+                <div class="output-header">
+                    <h3>Generated Content</h3>
+                    <button id="downloadPdfBtn" class="download-btn" onclick="downloadPDF()">📄 Download PDF</button>
+                </div>
+                <div id="outputContainer" class="output-content">
+                    Content will appear here...
+                </div>
+            </div>
+        </section>
+
+        <!-- Instant Doubt Solver Section -->
+        <section class="doubt-section">
+            <h2>💬 Instant Doubt Solver</h2>
+            <div class="doubt-card">
+                <textarea id="doubtInput" placeholder="Ask any doubt or paste your question here..."></textarea>
+                <div class="doubt-actions">
+                    <input type="file" id="doubtImageInput" accept="image/*">
+                    <button onclick="solveDoubt()">Solve Doubt 🚀</button>
+                </div>
+                <div id="doubtOutput" class="doubt-result"></div>
+            </div>
+        </section>
+        <!-- User Reviews & Feedback Section -->
+        <section class="section-container" id="feedbackSection">
+            <h3>💬 User Reviews & Feedback</h3>
+            <div class="feedback-box">
+                <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                    <div class="rating-stars">
+                        <span onclick="setRating(1)">★</span>
+                        <span onclick="setRating(2)">★</span>
+                        <span onclick="setRating(3)">★</span>
+                        <span onclick="setRating(4)">★</span>
+                        <span onclick="setRating(5)">★</span>
+                    </div>
+                    <textarea id="feedbackText" placeholder="Share your experience or suggestions with us..." rows="3" required></textarea>
+                    <button type="submit" class="secondary-btn">Submit Feedback</button>
+                </form>
+                
+                <div id="reviewsList" class="reviews-list"></div>
+            </div>
+        </section>
+
+        <!-- Subscribe Section -->
+        <section class="subscribe-banner">
+            <div class="subscribe-content">
+                <h3>🔔 Stay Updated with EduAI Hub!</h3>
+                <p>Subscribe to receive notifications about new AI features, study materials, and exam updates.</p>
+                <form class="subscribe-form" onsubmit="handleSubscribe(event)">
+                    <input type="email" id="subEmail" placeholder="Enter your email address..." required>
+                    <button type="submit" class="sub-btn">Subscribe Now</button>
+                </form>
+                <p id="subStatus" class="status-msg"></p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Registration Modal Popup -->
+    <div id="registerModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>Welcome to EduAI Hub 🚀</h2>
+            <p>Please register with your details to access all AI Learning Tools.</p>
+            <form id="registerForm" onsubmit="handleRegistration(event)">
+                <div class="input-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="Enter your full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="example@gmail.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="regPhone">Phone Number</label>
+                    <input type="tel" id="regPhone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
+                </div>
+                <button type="submit" class="primary-btn">Register & Start Learning</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
