@@ -1,45 +1,25 @@
-/* =========================================================
-   EDUAI HUB
-   AI STUDY COMPANION
-   ========================================================= */
+```javascript
+// =====================================================
+// EDUAI HUB - FIXED APP.JS
+// =====================================================
 
+// 👉 YAHAN APNI API KEY PASTE KARO
+const GEMINI_API_KEY = "PASTE_YOUR_API_KEY_HERE";
 
-/* =========================================================
-   1. GEMINI CONFIGURATION
-   ========================================================= */
-
-/*
-   IMPORTANT:
-   Paste your own Gemini API key below.
-
-   Example:
-   const GEMINI_API_KEY = "AIza....";
-
-   DO NOT share your API key publicly.
-*/
-
-const GEMINI_API_KEY = AQ.Ab8RN6I9x2j8_NbiO8561hTik5zIeIi1SgjYov5IWLELE-i6Pg;
-
-
-/*
-   Current Gemini model.
-
-   If your API key/project does not have access to this model,
-   the code will show the actual API error instead of hiding it.
-*/
-
-const GEMINI_MODEL = "gemini-3.8-flash";
-
+// Stable Gemini model
+const GEMINI_MODEL = "gemini-2.5-flash";
 
 let currentTab = "notes";
 let selectedRating = 5;
 
 
-/* =========================================================
-   2. PAGE INITIALIZATION
-   ========================================================= */
+// =====================================================
+// PAGE LOAD
+// =====================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
+
+    console.log("EduAI Hub JavaScript loaded successfully.");
 
     setupTabs();
     setupButtons();
@@ -53,19 +33,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-/* =========================================================
-   3. TAB SYSTEM
-   ========================================================= */
+// =====================================================
+// TAB SYSTEM
+// =====================================================
 
 function setupTabs() {
 
     const buttons = document.querySelectorAll(".tab-btn");
 
-    buttons.forEach(button => {
+    buttons.forEach(function (button) {
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", function () {
 
-            buttons.forEach(btn => {
+            buttons.forEach(function (btn) {
                 btn.classList.remove("active");
             });
 
@@ -86,67 +66,124 @@ function updateOutputTitle() {
 
     const title = document.getElementById("outputTitle");
 
-    const titles = {
-        notes: "AI Study Notes",
-        quiz: "AI Quiz",
-        ppt: "AI PPT Outline",
-        pyq: "AI PYQ Paper"
-    };
+    if (!title) return;
 
-    title.textContent = titles[currentTab] || "Generated Content";
+    if (currentTab === "notes") {
+        title.textContent = "AI Study Notes";
+    }
+
+    else if (currentTab === "quiz") {
+        title.textContent = "AI Quiz";
+    }
+
+    else if (currentTab === "ppt") {
+        title.textContent = "AI PPT Outline";
+    }
+
+    else if (currentTab === "pyq") {
+        title.textContent = "AI PYQ Practice Paper";
+    }
 
 }
 
 
-/* =========================================================
-   4. BUTTON EVENTS
-   ========================================================= */
+// =====================================================
+// BUTTON SETUP
+// =====================================================
 
 function setupButtons() {
 
-    document
-        .getElementById("generateBtn")
-        .addEventListener("click", generateContent);
+    const generateBtn =
+        document.getElementById("generateBtn");
+
+    const solveBtn =
+        document.getElementById("solveBtn");
+
+    const copyBtn =
+        document.getElementById("copyBtn");
+
+    const clearDoubtBtn =
+        document.getElementById("clearDoubtBtn");
+
+    const topicInput =
+        document.getElementById("topicInput");
 
 
-    document
-        .getElementById("solveBtn")
-        .addEventListener("click", solveDoubt);
+    if (generateBtn) {
+
+        generateBtn.addEventListener(
+            "click",
+            generateContent
+        );
+
+    }
 
 
-    document
-        .getElementById("clearDoubtBtn")
-        .addEventListener("click", () => {
+    if (solveBtn) {
 
-            document.getElementById("doubtInput").value = "";
-            document.getElementById("doubtOutput").innerHTML = "";
+        solveBtn.addEventListener(
+            "click",
+            solveDoubt
+        );
 
-        });
-
-
-    document
-        .getElementById("copyBtn")
-        .addEventListener("click", copyOutput);
+    }
 
 
-    document
-        .getElementById("topicInput")
-        .addEventListener("keydown", event => {
+    if (copyBtn) {
 
-            if (event.key === "Enter") {
-                generateContent();
+        copyBtn.addEventListener(
+            "click",
+            copyOutput
+        );
+
+    }
+
+
+    if (clearDoubtBtn) {
+
+        clearDoubtBtn.addEventListener(
+            "click",
+            function () {
+
+                const input =
+                    document.getElementById("doubtInput");
+
+                const output =
+                    document.getElementById("doubtOutput");
+
+                if (input) input.value = "";
+
+                if (output) output.innerHTML = "";
+
             }
+        );
 
-        });
+    }
+
+
+    if (topicInput) {
+
+        topicInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+                    generateContent();
+                }
+
+            }
+        );
+
+    }
 
 }
 
 
-/* =========================================================
-   5. GEMINI API
-   ========================================================= */
+// =====================================================
+// GEMINI API
+// =====================================================
 
-async function callGeminiAPI(promptText) {
+async function callGeminiAPI(prompt) {
 
     if (
         !GEMINI_API_KEY ||
@@ -154,14 +191,16 @@ async function callGeminiAPI(promptText) {
     ) {
 
         throw new Error(
-            "Gemini API key missing. Open app.js and paste your API key."
+            "API key missing. Open app.js and paste your Gemini API key."
         );
 
     }
 
 
     const url =
-        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+        "https://generativelanguage.googleapis.com/v1beta/models/" +
+        GEMINI_MODEL +
+        ":generateContent";
 
 
     const response = await fetch(url, {
@@ -169,8 +208,11 @@ async function callGeminiAPI(promptText) {
         method: "POST",
 
         headers: {
+
             "Content-Type": "application/json",
+
             "x-goog-api-key": GEMINI_API_KEY
+
         },
 
         body: JSON.stringify({
@@ -178,75 +220,63 @@ async function callGeminiAPI(promptText) {
             contents: [
 
                 {
-                    role: "user",
 
                     parts: [
+
                         {
-                            text: promptText
+                            text: prompt
                         }
+
                     ]
 
                 }
 
-            ],
-
-            generationConfig: {
-
-                temperature: 0.7,
-
-                maxOutputTokens: 2048
-
-            }
+            ]
 
         })
 
     });
 
 
-    let data;
+    const data = await response.json();
 
-    try {
 
-        data = await response.json();
+    console.log(
+        "Gemini response:",
+        data
+    );
 
-    } catch {
+
+    if (!response.ok) {
+
+        let message =
+            data &&
+            data.error &&
+            data.error.message
+                ? data.error.message
+                : "Gemini API request failed.";
 
         throw new Error(
-            `Gemini API returned an invalid response. HTTP ${response.status}`
+            message
         );
 
     }
 
 
-    console.log("Gemini API Response:", data);
-
-
-    /* API ERROR */
-
-    if (!response.ok) {
-
-        const message =
-            data?.error?.message ||
-            `Gemini API Error. HTTP ${response.status}`;
-
-        throw new Error(message);
-
-    }
-
-
-    /* RESPONSE */
-
     const text =
-        data?.candidates?.[0]?.content?.parts
-            ?.map(part => part.text || "")
-            .join("")
-            .trim();
+        data &&
+        data.candidates &&
+        data.candidates[0] &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts &&
+        data.candidates[0].content.parts[0] &&
+        data.candidates[0].content.parts[0].text;
 
 
     if (!text) {
 
         throw new Error(
-            "Gemini API returned no text response."
+            "Gemini returned an empty response."
         );
 
     }
@@ -257,37 +287,48 @@ async function callGeminiAPI(promptText) {
 }
 
 
-/* =========================================================
-   6. GENERATE NOTES / QUIZ / PPT / PYQ
-   ========================================================= */
+// =====================================================
+// GENERATE CONTENT
+// =====================================================
 
 async function generateContent() {
 
-    const topicInput =
+    const input =
         document.getElementById("topicInput");
 
     const output =
         document.getElementById("outputContainer");
 
-    const status =
-        document.getElementById("statusText");
-
     const button =
         document.getElementById("generateBtn");
 
+    const status =
+        document.getElementById("statusText");
+
+
+    if (!input || !output) {
+
+        console.error(
+            "Required HTML elements not found."
+        );
+
+        return;
+
+    }
+
 
     const topic =
-        topicInput.value.trim();
+        input.value.trim();
 
 
     if (!topic) {
 
-        topicInput.focus();
-
         output.innerHTML =
-            `<div class="api-error">
-                Please enter a topic first.
-            </div>`;
+            '<div class="api-error">' +
+            'Please enter a topic first.' +
+            '</div>';
+
+        input.focus();
 
         return;
 
@@ -297,120 +338,78 @@ async function generateContent() {
     let prompt = "";
 
 
-    /* NOTES */
+    // NOTES
 
     if (currentTab === "notes") {
 
-        prompt = `
-You are an expert college teacher.
-
-Create clear and exam-friendly study notes on:
-
-"${topic}"
-
-Include:
-
-1. Definition
-2. Important concepts
-3. Key points
-4. Examples
-5. Advantages and disadvantages where applicable
-6. Important exam questions
-7. Short revision summary
-
-Use simple language suitable for BCA students.
-Format the answer with headings and bullet points.
-`;
+        prompt =
+            "Create clear and detailed BCA study notes on: " +
+            topic +
+            ". Include definition, important concepts, " +
+            "examples, advantages, disadvantages, exam points " +
+            "and a short revision summary. Use simple language.";
 
     }
 
 
-    /* QUIZ */
+    // QUIZ
 
     else if (currentTab === "quiz") {
 
-        prompt = `
-Create a BCA-level MCQ quiz on:
-
-"${topic}"
-
-Create exactly 10 questions.
-
-For every question provide:
-
-Question
-A
-B
-C
-D
-Correct Answer
-Short Explanation
-
-Make the questions useful for exam preparation.
-`;
+        prompt =
+            "Create 10 multiple choice questions about " +
+            topic +
+            " for BCA students. " +
+            "Give four options A, B, C and D. " +
+            "After every question provide the correct answer " +
+            "and a short explanation.";
 
     }
 
 
-    /* PPT */
+    // PPT
 
     else if (currentTab === "ppt") {
 
-        prompt = `
-Create a professional 8-slide presentation outline about:
-
-"${topic}"
-
-For every slide provide:
-
-Slide Number
-Slide Title
-3-5 important bullet points
-Speaker Notes
-
-Keep it suitable for a BCA college presentation.
-`;
+        prompt =
+            "Create an 8-slide college presentation about " +
+            topic +
+            ". For every slide provide slide title, " +
+            "important bullet points and speaker notes.";
 
     }
 
 
-    /* PYQ */
+    // PYQ
 
     else if (currentTab === "pyq") {
 
-        prompt = `
-Create a practice PYQ-style paper for:
-
-"${topic}"
-
-Create:
-
-5 short-answer questions
-5 long-answer questions
-5 MCQs
-
-Also provide answers/solutions after the questions.
-
-Important:
-These are practice questions, not claims about an actual university previous-year paper.
-`;
+        prompt =
+            "Create a BCA practice question paper about " +
+            topic +
+            ". Include 5 short questions, 5 long questions " +
+            "and 5 MCQs. Provide answers after the questions. " +
+            "Clearly mention that these are practice questions.";
 
     }
 
 
-    button.disabled = true;
+    output.innerHTML =
+        '<div class="loading">' +
+        '<div class="spinner"></div>' +
+        'Generating content...' +
+        '</div>';
 
-    button.textContent = "Generating...";
 
-    status.textContent = "AI is working...";
+    if (status) {
+        status.textContent = "AI is working...";
+    }
 
 
-    output.innerHTML = `
-        <div class="loading">
-            <div class="spinner"></div>
-            Generating your content...
-        </div>
-    `;
+    if (button) {
+        button.disabled = true;
+        button.textContent = "Generating...";
+    }
 
 
     try {
@@ -419,30 +418,55 @@ These are practice questions, not claims about an actual university previous-yea
             await callGeminiAPI(prompt);
 
 
-        output.textContent = result;
+        output.textContent =
+            result;
 
-        status.textContent = "Generated successfully ✓";
+
+        if (status) {
+            status.textContent =
+                "Generated successfully ✓";
+        }
 
 
-    } catch (error) {
+    }
 
-        showAPIError(output, error);
+    catch (error) {
 
-        status.textContent = "Generation failed";
+        console.error(
+            "Generate error:",
+            error
+        );
+
+
+        showError(
+            output,
+            error
+        );
+
+
+        if (status) {
+            status.textContent =
+                "Generation failed";
+        }
 
     }
 
 
-    button.disabled = false;
+    if (button) {
 
-    button.textContent = "Generate ✨";
+        button.disabled = false;
+
+        button.textContent =
+            "Generate ✨";
+
+    }
 
 }
 
 
-/* =========================================================
-   7. DOUBT SOLVER
-   ========================================================= */
+// =====================================================
+// DOUBT SOLVER
+// =====================================================
 
 async function solveDoubt() {
 
@@ -456,53 +480,49 @@ async function solveDoubt() {
         document.getElementById("solveBtn");
 
 
+    if (!input || !output) return;
+
+
     const question =
         input.value.trim();
 
 
     if (!question) {
 
-        input.focus();
-
-        output.innerHTML = `
-            <div class="api-error">
-                Please enter your doubt first.
-            </div>
-        `;
+        output.innerHTML =
+            '<div class="api-error">' +
+            'Please enter your doubt first.' +
+            '</div>';
 
         return;
 
     }
 
 
-    button.disabled = true;
-
-    button.textContent = "Solving...";
-
-
-    output.innerHTML = `
-        <div class="loading">
-            <div class="spinner"></div>
-            AI is solving your doubt...
-        </div>
-    `;
+    output.innerHTML =
+        '<div class="loading">' +
+        '<div class="spinner"></div>' +
+        'AI is solving your doubt...' +
+        '</div>';
 
 
-    const prompt = `
-You are a helpful BCA college tutor.
+    if (button) {
 
-Solve the student's doubt below.
+        button.disabled = true;
 
-Student Question:
-${question}
+        button.textContent =
+            "Solving...";
 
-Instructions:
+    }
 
-- Explain in simple language.
-- Give step-by-step explanation when needed.
-- Give an example if useful.
-- Keep the answer accurate and educational.
-`;
+
+    const prompt =
+        "You are a helpful BCA tutor. " +
+        "Solve this student question clearly. " +
+        "Explain step by step when necessary. " +
+        "Use simple language and examples.\n\n" +
+        "Question:\n" +
+        question;
 
 
     try {
@@ -511,75 +531,82 @@ Instructions:
             await callGeminiAPI(prompt);
 
 
-        output.textContent = result;
+        output.textContent =
+            result;
 
-    } catch (error) {
+    }
 
-        showAPIError(output, error);
+    catch (error) {
+
+        showError(
+            output,
+            error
+        );
 
     }
 
 
-    button.disabled = false;
+    if (button) {
 
-    button.textContent = "🚀 Solve My Doubt";
+        button.disabled = false;
 
-}
+        button.textContent =
+            "🚀 Solve My Doubt";
 
-
-/* =========================================================
-   8. API ERROR DISPLAY
-   ========================================================= */
-
-function showAPIError(element, error) {
-
-    console.error("EduAI Error:", error);
-
-
-    element.innerHTML = `
-        <div class="api-error">
-            <strong>⚠️ AI Request Failed</strong>
-
-            <br><br>
-
-            ${escapeHTML(error.message)}
-
-            <br><br>
-
-            <strong>What to check:</strong>
-
-            <br>
-            • API key is correct
-            <br>
-            • Gemini API is enabled
-            <br>
-            • Your API key has access to the selected model
-            <br>
-            • Browser internet connection is working
-            <br>
-            • Check browser Console (F12) for technical details
-        </div>
-    `;
+    }
 
 }
 
 
-/* =========================================================
-   9. COPY OUTPUT
-   ========================================================= */
+// =====================================================
+// ERROR DISPLAY
+// =====================================================
+
+function showError(element, error) {
+
+    if (!element) return;
+
+
+    const message =
+        error && error.message
+            ? error.message
+            : "Unknown error occurred.";
+
+
+    element.innerHTML =
+        '<div class="api-error">' +
+        '<strong>⚠️ AI Request Failed</strong>' +
+        '<br><br>' +
+        escapeHTML(message) +
+        '<br><br>' +
+        'Check your API key and internet connection.' +
+        '</div>';
+
+}
+
+
+// =====================================================
+// COPY
+// =====================================================
 
 async function copyOutput() {
 
     const output =
         document.getElementById("outputContainer");
 
+
+    if (!output) return;
+
+
     const text =
         output.innerText.trim();
 
 
-    if (!text || text.includes("Your AI content will appear here")) {
+    if (!text) {
 
-        alert("Generate some content first.");
+        alert(
+            "Nothing to copy."
+        );
 
         return;
 
@@ -588,154 +615,296 @@ async function copyOutput() {
 
     try {
 
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(
+            text
+        );
+
 
         const button =
             document.getElementById("copyBtn");
 
-        button.textContent = "✓ Copied";
 
-        setTimeout(() => {
-            button.textContent = "📋 Copy";
-        }, 1500);
+        if (button) {
 
-    } catch {
+            button.textContent =
+                "✓ Copied";
 
-        alert("Copy failed. Please select and copy the text manually.");
+            setTimeout(
+                function () {
 
-    }
+                    button.textContent =
+                        "📋 Copy";
 
-}
-
-
-/* =========================================================
-   10. REGISTRATION
-   ========================================================= */
-
-function setupRegistration() {
-
-    const form =
-        document.getElementById("registrationForm");
-
-
-    const saved =
-        localStorage.getItem("eduai_user");
-
-
-    if (saved) {
-
-        try {
-
-            const user =
-                JSON.parse(saved);
-
-            showRegistrationMessage(
-                `Welcome back, ${user.name}! 👋`
+                },
+                1500
             );
-
-        } catch {
-
-            localStorage.removeItem("eduai_user");
 
         }
 
     }
 
+    catch {
 
-    form.addEventListener("submit", event => {
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById("regName").value.trim();
-
-        const email =
-            document.getElementById("regEmail").value.trim();
-
-        const phone =
-            document.getElementById("regPhone").value.trim();
-
-
-        const user = {
-
-            name,
-            email,
-            phone,
-
-            registeredAt:
-                new Date().toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "eduai_user",
-            JSON.stringify(user)
+        alert(
+            "Copy failed."
         );
 
-
-        showRegistrationMessage(
-            `Registration successful! Welcome ${name} 🎉`
-        );
-
-
-        form.reset();
-
-    });
+    }
 
 }
 
 
-function showRegistrationMessage(message) {
+// =====================================================
+// REGISTRATION
+// =====================================================
+
+function setupRegistration() {
+
+    const form =
+        document.getElementById(
+            "registrationForm"
+        );
+
+
+    if (!form) {
+
+        console.error(
+            "Registration form not found."
+        );
+
+        return;
+
+    }
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("regName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("regEmail")
+                    .value
+                    .trim();
+
+
+            const phone =
+                document
+                    .getElementById("regPhone")
+                    .value
+                    .trim();
+
+
+            if (!name || !email || !phone) {
+
+                showRegistrationMessage(
+                    "Please fill all fields.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+
+                showRegistrationMessage(
+                    "Please enter a valid 10-digit phone number.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const user = {
+
+                name: name,
+
+                email: email,
+
+                phone: phone,
+
+                registeredAt:
+                    new Date().toISOString()
+
+            };
+
+
+            try {
+
+                localStorage.setItem(
+                    "eduai_user",
+                    JSON.stringify(user)
+                );
+
+
+                showRegistrationMessage(
+                    "Registration successful! Welcome " +
+                    name +
+                    " 🎉",
+                    false
+                );
+
+
+                form.reset();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Registration error:",
+                    error
+                );
+
+
+                showRegistrationMessage(
+                    "Registration could not be saved in this browser.",
+                    true
+                );
+
+            }
+
+        }
+    );
+
+
+    // SHOW SAVED USER
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "eduai_user"
+            );
+
+
+        if (saved) {
+
+            const user =
+                JSON.parse(saved);
+
+
+            showRegistrationMessage(
+                "Welcome back, " +
+                user.name +
+                "! 👋",
+                false
+            );
+
+        }
+
+    }
+
+    catch {
+
+        localStorage.removeItem(
+            "eduai_user"
+        );
+
+    }
+
+}
+
+
+function showRegistrationMessage(
+    message,
+    isError
+) {
 
     const box =
-        document.getElementById("registrationStatus");
+        document.getElementById(
+            "registrationStatus"
+        );
 
 
-    box.textContent = message;
+    if (!box) return;
 
-    box.style.marginTop = "15px";
 
-    box.style.color = "#15803d";
+    box.textContent =
+        message;
 
-    box.style.fontWeight = "600";
+
+    box.style.marginTop =
+        "15px";
+
+
+    box.style.fontWeight =
+        "600";
+
+
+    box.style.color =
+        isError
+            ? "#dc2626"
+            : "#15803d";
 
 }
 
 
-/* =========================================================
-   11. REVIEWS
-   ========================================================= */
+// =====================================================
+// REVIEWS
+// =====================================================
 
 function setupFeedback() {
 
     const stars =
-        document.querySelectorAll("#ratingStars span");
+        document.querySelectorAll(
+            "#ratingStars span"
+        );
 
 
-    stars.forEach(star => {
+    stars.forEach(function (star) {
 
-        star.addEventListener("click", () => {
+        star.addEventListener(
+            "click",
+            function () {
 
-            setRating(
-                Number(star.dataset.rating)
-            );
+                setRating(
+                    Number(
+                        star.dataset.rating
+                    )
+                );
 
-        });
+            }
+        );
 
     });
 
 
-    document
-        .getElementById("feedbackForm")
-        .addEventListener("submit", event => {
+    const form =
+        document.getElementById(
+            "feedbackForm"
+        );
+
+
+    if (!form) return;
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
 
             event.preventDefault();
 
+
             const text =
                 document
-                    .getElementById("feedbackText")
+                    .getElementById(
+                        "feedbackText"
+                    )
                     .value
                     .trim();
 
@@ -743,21 +912,39 @@ function setupFeedback() {
             if (!text) return;
 
 
-            const user =
-                JSON.parse(
-                    localStorage.getItem("eduai_user") || "{}"
-                );
+            let user = null;
+
+
+            try {
+
+                user =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "eduai_user"
+                        )
+                    );
+
+            }
+
+            catch {
+
+                user = null;
+
+            }
 
 
             const review = {
 
                 name:
-                    user.name || "Anonymous Student",
+                    user && user.name
+                        ? user.name
+                        : "Anonymous Student",
 
                 rating:
                     selectedRating,
 
-                text,
+                text:
+                    text,
 
                 date:
                     new Date().toLocaleDateString()
@@ -765,13 +952,30 @@ function setupFeedback() {
             };
 
 
-            const reviews =
-                JSON.parse(
-                    localStorage.getItem("eduai_reviews") || "[]"
-                );
+            let reviews = [];
 
 
-            reviews.unshift(review);
+            try {
+
+                reviews =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "eduai_reviews"
+                        )
+                    ) || [];
+
+            }
+
+            catch {
+
+                reviews = [];
+
+            }
+
+
+            reviews.unshift(
+                review
+            );
 
 
             localStorage.setItem(
@@ -780,35 +984,52 @@ function setupFeedback() {
             );
 
 
-            document
-                .getElementById("feedbackText")
-                .value = "";
+            document.getElementById(
+                "feedbackText"
+            ).value = "";
 
 
             loadReviews();
 
-        });
+        }
+    );
 
 }
 
 
 function setRating(rating) {
 
-    selectedRating = rating;
+    selectedRating =
+        rating;
 
 
     document
-        .querySelectorAll("#ratingStars span")
-        .forEach(star => {
+        .querySelectorAll(
+            "#ratingStars span"
+        )
+        .forEach(function (star) {
 
             const value =
-                Number(star.dataset.rating);
+                Number(
+                    star.dataset.rating
+                );
 
 
-            star.classList.toggle(
-                "active",
-                value <= rating
-            );
+            if (value <= rating) {
+
+                star.classList.add(
+                    "active"
+                );
+
+            }
+
+            else {
+
+                star.classList.remove(
+                    "active"
+                );
+
+            }
 
         });
 
@@ -818,29 +1039,55 @@ function setRating(rating) {
 function loadReviews() {
 
     const container =
-        document.getElementById("reviewsList");
-
-
-    const reviews =
-        JSON.parse(
-            localStorage.getItem("eduai_reviews") || "[]"
+        document.getElementById(
+            "reviewsList"
         );
+
+
+    if (!container) return;
+
+
+    let reviews = [];
+
+
+    try {
+
+        reviews =
+            JSON.parse(
+                localStorage.getItem(
+                    "eduai_reviews"
+                )
+            ) || [];
+
+    }
+
+    catch {
+
+        reviews = [];
+
+    }
 
 
     if (reviews.length === 0) {
 
-        container.innerHTML = `
+        container.innerHTML =
+            `
             <div class="review">
+
                 <div class="review-name">
                     Abhiraj Kumar
-                    <span class="review-stars">★★★★★</span>
+
+                    <span class="review-stars">
+                        ★★★★★
+                    </span>
                 </div>
 
                 <div class="review-text">
                     Very helpful AI tools for study and exam preparation.
                 </div>
+
             </div>
-        `;
+            `;
 
         return;
 
@@ -848,91 +1095,143 @@ function loadReviews() {
 
 
     container.innerHTML =
-        reviews.map(review => `
+        reviews.map(function (review) {
 
-            <div class="review">
+            return `
+                <div class="review">
 
-                <div class="review-name">
-                    ${escapeHTML(review.name)}
+                    <div class="review-name">
 
-                    <span class="review-stars">
-                        ${"★".repeat(review.rating)}
-                    </span>
+                        ${escapeHTML(review.name)}
+
+                        <span class="review-stars">
+                            ${"★".repeat(review.rating)}
+                        </span>
+
+                    </div>
+
+                    <div class="review-text">
+                        ${escapeHTML(review.text)}
+                    </div>
+
                 </div>
+            `;
 
-                <div class="review-text">
-                    ${escapeHTML(review.text)}
-                </div>
-
-            </div>
-
-        `).join("");
+        }).join("");
 
 }
 
 
-/* =========================================================
-   12. SUBSCRIBE
-   ========================================================= */
+// =====================================================
+// SUBSCRIBE
+// =====================================================
 
 function setupSubscribe() {
 
-    document
-        .getElementById("subscribeForm")
-        .addEventListener("submit", event => {
+    const form =
+        document.getElementById(
+            "subscribeForm"
+        );
+
+
+    if (!form) return;
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
 
             event.preventDefault();
 
 
             const input =
-                document.getElementById("subEmail");
+                document.getElementById(
+                    "subEmail"
+                );
+
+
+            const status =
+                document.getElementById(
+                    "subStatus"
+                );
+
 
             const email =
                 input.value.trim();
 
 
-            const subscribers =
-                JSON.parse(
-                    localStorage.getItem("eduai_subscribers") || "[]"
-                );
+            if (!email) return;
+
+
+            let subscribers = [];
+
+
+            try {
+
+                subscribers =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "eduai_subscribers"
+                        )
+                    ) || [];
+
+            }
+
+            catch {
+
+                subscribers = [];
+
+            }
 
 
             if (!subscribers.includes(email)) {
 
-                subscribers.push(email);
-
-                localStorage.setItem(
-                    "eduai_subscribers",
-                    JSON.stringify(subscribers)
+                subscribers.push(
+                    email
                 );
 
             }
 
 
-            document
-                .getElementById("subStatus")
-                .textContent =
-                "✓ Thanks for subscribing!";
+            localStorage.setItem(
+                "eduai_subscribers",
+                JSON.stringify(
+                    subscribers
+                )
+            );
+
+
+            if (status) {
+
+                status.textContent =
+                    "✓ Successfully subscribed!";
+
+                status.style.marginTop =
+                    "10px";
+
+            }
 
 
             input.value = "";
 
-        });
+        }
+    );
 
 }
 
 
-/* =========================================================
-   13. SECURITY HELPER
-   ========================================================= */
+// =====================================================
+// SECURITY
+// =====================================================
 
 function escapeHTML(value) {
 
     return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
-      }
+}
+```
