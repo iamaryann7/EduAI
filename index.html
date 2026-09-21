@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduAI Hub | AI Study Companion</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🎓 EduAI Hub</div>
+            <p>Your Smart AI Study Companion</p>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- AI TOOLS -->
+        <section class="card">
+
+            <div class="section-title">
+                <span>✨</span>
+                <div>
+                    <h2>AI Learning Tools</h2>
+                    <p>Generate study material instantly with AI</p>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+
+                <button class="tab-btn active" data-tab="notes">
+                    📝 Notes
+                </button>
+
+                <button class="tab-btn" data-tab="quiz">
+                    🧠 Quiz
+                </button>
+
+                <button class="tab-btn" data-tab="ppt">
+                    📊 PPT Maker
+                </button>
+
+                <button class="tab-btn" data-tab="pyq">
+                    🎯 PYQ
+                </button>
+
+            </div>
+
+
+            <!-- INPUT -->
+            <div class="generator">
+
+                <input
+                    type="text"
+                    id="topicInput"
+                    placeholder="Enter a topic, e.g. HTML, DBMS, C Programming..."
+                    autocomplete="off"
+                >
+
+                <button id="generateBtn">
+                    Generate ✨
+                </button>
+
+            </div>
+
+
+            <!-- OUTPUT -->
+            <div class="output-card">
+
+                <div class="output-header">
+
+                    <div>
+                        <h3 id="outputTitle">Generated Content</h3>
+                        <span id="statusText">Ready</span>
+                    </div>
+
+                    <button id="copyBtn" class="small-btn">
+                        📋 Copy
+                    </button>
+
+                </div>
+
+                <div id="outputContainer" class="output-content">
+                    <div class="empty-state">
+                        <div class="empty-icon">🤖</div>
+                        <h3>Your AI content will appear here</h3>
+                        <p>Enter a topic and select a tool above.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DOUBT SOLVER -->
+        <section class="card">
+
+            <div class="section-title">
+                <span>💬</span>
+                <div>
+                    <h2>Instant Doubt Solver</h2>
+                    <p>Ask your question and get a clear explanation</p>
+                </div>
+            </div>
+
+            <textarea
+                id="doubtInput"
+                placeholder="Type your question here..."
+            ></textarea>
+
+            <div class="doubt-actions">
+
+                <button id="solveBtn">
+                    🚀 Solve My Doubt
+                </button>
+
+                <button id="clearDoubtBtn" class="outline-btn">
+                    Clear
+                </button>
+
+            </div>
+
+            <div id="doubtOutput" class="doubt-output"></div>
+
+        </section>
+
+
+        <!-- REGISTRATION -->
+        <section class="card registration-card">
+
+            <div class="section-title">
+                <span>👤</span>
+                <div>
+                    <h2>Student Registration</h2>
+                    <p>Save your details on this device</p>
+                </div>
+            </div>
+
+            <form id="registrationForm">
+
+                <div class="form-grid">
+
+                    <input
+                        type="text"
+                        id="regName"
+                        placeholder="Full Name"
+                        required
+                    >
+
+                    <input
+                        type="email"
+                        id="regEmail"
+                        placeholder="Email Address"
+                        required
+                    >
+
+                    <input
+                        type="tel"
+                        id="regPhone"
+                        placeholder="10-digit Phone Number"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    Register
+                </button>
+
+            </form>
+
+            <div id="registrationStatus"></div>
+
+        </section>
+
+
+        <!-- FEEDBACK -->
+        <section class="card">
+
+            <div class="section-title">
+                <span>⭐</span>
+                <div>
+                    <h2>User Reviews</h2>
+                    <p>Share your experience with EduAI Hub</p>
+                </div>
+            </div>
+
+            <form id="feedbackForm">
+
+                <div class="stars" id="ratingStars">
+
+                    <span data-rating="1">★</span>
+                    <span data-rating="2">★</span>
+                    <span data-rating="3">★</span>
+                    <span data-rating="4">★</span>
+                    <span data-rating="5">★</span>
+
+                </div>
+
+                <textarea
+                    id="feedbackText"
+                    placeholder="Write your feedback..."
+                    required
+                ></textarea>
+
+                <button type="submit" class="primary-btn">
+                    Submit Review
+                </button>
+
+            </form>
+
+            <div id="reviewsList"></div>
+
+        </section>
+
+
+        <!-- SUBSCRIBE -->
+        <section class="subscribe">
+
+            <div>
+                <h2>🔔 Stay Updated</h2>
+                <p>Get updates about new EduAI features.</p>
+            </div>
+
+            <form id="subscribeForm">
+
+                <input
+                    type="email"
+                    id="subEmail"
+                    placeholder="Your email address"
+                    required
+                >
+
+                <button type="submit">
+                    Subscribe
+                </button>
+
+            </form>
+
+            <div id="subStatus"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 EduAI Hub • Built for Students ❤️</p>
+    </footer>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
